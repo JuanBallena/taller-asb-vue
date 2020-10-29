@@ -1,0 +1,35 @@
+#style__table-container {
+    margin: 0 0 15px 0;
+}
+
+#style__table-container table thead tr th {
+    background: var(--v-secondaryColor-base);
+    text-transform: uppercase;
+    color: white;
+}
+
+#style__table-container table th {
+    color: white;
+    font-size: 13px;
+    height: 40px;
+}
+
+#style__row .style__row__col {
+    padding: 0 12px;
+    display: flex;
+}
+
+#style__row .style__row__col__div {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+@media (max-width: 610px) {
+    #style__table-container table thead tr th {
+        display: none;
+    }
+    #style__row .style__row__col {
+        padding: 5px 10px;
+    }
+}
