@@ -1,37 +1,30 @@
 <template>
-  <div id="title" :class="`${color}--text`">{{ text }}</div>
+  <div class="formGroupTitle">{{ text }}</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-
 export default Vue.extend({
-  
   props: {
     text: {
       default: 'text',
       type: String
-    },
-    color:{
-      type: String,
-      default: ''
     }
   }
-
 });
 </script>
 
 <style lang="sass" scoped>
 
-#title
+.formGroupTitle
   color: var(--v-secondaryColor-base)
-  font-size: 20px
-  width: 100%
+  font-size: 13px
+  padding: 8px 0 0 0
+  font-weight: bold
   text-transform: uppercase
 
-@media (max-width: 750px)
-  #title
-    font-size: 18px
-    font-weight: bold
+@media (max-width: 610px)
+  .formGroupTitle
+    padding: 8px 0 0 0
 
 </style>

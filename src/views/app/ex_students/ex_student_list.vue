@@ -36,7 +36,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState, mapActions } from 'vuex';
-import ExStudentTableComponent from "@/views/app/ex_student/ex_student_table.vue";
+import ExStudentTableComponent from "@/views/app/ex_students/ex_student_table.vue";
 
 export default Vue.extend({
 
@@ -49,6 +49,7 @@ export default Vue.extend({
       size: 15,
       page: 1,
       query: '',
+      temp: '',
     }
   },
 
@@ -68,11 +69,13 @@ export default Vue.extend({
     ...mapActions('exStudentModule', ['getExStudentList','resetExStudentList','resetTotalPages']),
 
     async changePage() {
-      await this.getExStudentList(`?page=${ this.pageApi }&size=${ this.size }`);
+      await this.getExStudentList(`?q=${ this.temp }&page=${ this.pageApi }&size=${ this.size }`);
     },
 
     async searchExStudent() {
-      await this.getExStudentList(`?q=${ this.query }&page=0&size=${ this.size }`);
+      this.page = 1;
+      this.temp = this.query || '';
+      await this.getExStudentList(`?q=${ this.temp }&page=${ this.pageApi }&size=${ this.size }`);
     }
   },
 

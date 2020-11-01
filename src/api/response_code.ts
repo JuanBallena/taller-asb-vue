@@ -1,5 +1,7 @@
 export function responseCodeOk(code: number): boolean {
-  return code === 200;
+
+  const codes = [200, 201, 204];
+  return codes.includes(code);
 }
 
 export function getMessageErrorResponseCode(code: number): string {

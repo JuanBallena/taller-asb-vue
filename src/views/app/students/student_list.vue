@@ -48,6 +48,7 @@ export default Vue.extend({
       size: 15,
       page: 1,
       query: '',
+      temp: ''
     }
   },
 
@@ -67,11 +68,13 @@ export default Vue.extend({
     ...mapActions('studentModule', ['getStudentList','resetStudentList','resetTotalPages']),
 
     async changePage() {
-      await this.getStudentList(`?page=${ this.pageApi }&size=${ this.size }`);
+      await this.getStudentList(`?q=${ this.temp }&page=${ this.pageApi }&size=${ this.size }`);
     },
 
     async searchStudent() {
-      await this.getStudentList(`?q=${ this.query }&page=0&size=${ this.size }`);
+      this.page = 1;
+      this.temp = this.query || '';
+      await this.getStudentList(`?q=${ this.temp }&page=${ this.pageApi }&size=${ this.size }`);
     }
   },
 

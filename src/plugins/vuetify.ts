@@ -16,6 +16,7 @@ export default new Vuetify({
         accentColor: '#F3F3F3',
         successColor: '#2DD2B0',
         dangerColor: '#DC5648',
+        infoColor: '#BDBDBD',
         //error: '#FF5252',
         //info: '#2196F3',
         

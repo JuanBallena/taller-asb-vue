@@ -2,20 +2,22 @@ import axios from "axios";
 import { getBaseUrlApi } from "@/api/index";
 import { checkResponseStatusCode } from "@/utils/response_status_http"
 import { getMessageErrorResponseCode, responseCodeOk } from "@/api/response_code";
-import { Theme } from "@/interfaces/Theme";
+import { Theme } from "@/models/Theme";
+import { ITheme, IFormCreateTheme } from "@/interfaces/theme_interfaces";
+import * as themeConverter from "@/converter/theme_converter";
 
 export default {
 
   namespaced: true,
 
   state: {
-    themeList: [],
+    themeList: [] as Theme[],
     totalPages: -1,
-    theme: null,
+    theme: Theme,
   },
 
   mutations: {
-    SET_THEME_LIST(state: { themeList: [] }, data: []) {
+    SET_THEME_LIST(state: { themeList: Theme[] }, data: ITheme[]) {
       state.themeList = data;
     },
 
@@ -23,7 +25,7 @@ export default {
       state.totalPages = pages;
     },
 
-    SET_THEME(state: { theme: Theme }, data: Theme) {
+    SET_THEME(state: { theme: Theme }, data: ITheme) {
       state.theme = data;
     }
   },
@@ -59,6 +61,25 @@ export default {
           commit('SET_THEME', data);
         } else {
           alert(responseCode);
+        }
+      } catch (error) {
+        checkResponseStatusCode(error.response.status);
+      }
+    },
+
+    async saveTheme({ commit }: any, form: IFormCreateTheme) {
+
+      try {
+        const dataPost = themeConverter.toCreateThemeFormDto(form);
+        const response = await axios.post(getBaseUrlApi() + `/themes`, dataPost/*, getAuthorization()*/)
+        const responseCode = response.data['responseCode'];
+        
+        if (responseCodeOk(responseCode)) {
+          const data = response.data['data'];
+          
+          commit('SET_THEME', data);
+        } else {
+          console.log(responseCode);
         }
       } catch (error) {
         checkResponseStatusCode(error.response.status);

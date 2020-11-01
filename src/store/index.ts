@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import exStudentModule from "./ex_student";
+import parameterModule from "./parameter";
 import studentAnioModule from "./student_anio";
 import studentModule from "./student";
 import themeModule from "./theme";
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   },
   modules: {
     exStudentModule,
+    parameterModule,
     studentAnioModule,
     studentModule,
     themeModule,

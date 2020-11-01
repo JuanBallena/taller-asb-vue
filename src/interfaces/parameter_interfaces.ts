@@ -1,4 +1,5 @@
-export interface Parameter {
+export interface IParameter {
+
   id: number;
   description: string;
 }

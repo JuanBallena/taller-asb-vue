@@ -33,7 +33,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/dto/dto.student"  ],
   "exclude": [
     "node_modules"
   ]

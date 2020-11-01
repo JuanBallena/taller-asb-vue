@@ -55,7 +55,7 @@
             <div class="login__submit-button-container">
               <RoundedButtonColorComponent
                 block 
-                routeName="inicio" 
+                :route="{ name: 'dashboard' }" 
                 text="acceder"
                 icon="fa-arrow-right"
                 color="secondaryColor"

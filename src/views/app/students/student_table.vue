@@ -12,10 +12,10 @@
       disable-pagination
     >
       <template v-slot:[`item.fullName`]="{ item }">
-        {{ item.fullName() }}
+        {{ item.getFullName() }}
       </template>
       <template v-slot:[`item.hasDocumentCopy`]="{ item }">
-        {{ item.hasDocumentCopyText() }}
+        {{ item.getHasDocumentCopy() }}
       </template>
       <template v-slot:[`item.status`]="{ item }">
         <ChipComponent 
@@ -41,19 +41,20 @@ export default Vue.extend({
 
   props: {
     items: {
-      default: () => [],
-      type: Array as () => Array<Student>
+      type: Array as () => Array<Student>,
+      default: () => []
     }
   },
   
   data: () => {
     return {
       headers: [
-        { text: 'Alumno',     value: 'fullName' },
+        { text: 'Alumno', value: 'fullName' },
+        { text: 'Doc.', value: 'documentType.description'},
         { text: 'Nro. Doc.', value: 'document'},
         { text: 'Copia Doc.', value: 'hasDocumentCopy' },
-        { text: 'Estado',    value: 'status' },
-        { text: 'Acciones',    value: 'actions' },
+        { text: 'Estado', value: 'status' },
+        { text: 'Acciones', value: 'actions' },
       ],
     }
   },

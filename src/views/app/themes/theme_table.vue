@@ -26,8 +26,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Theme } from '@/interfaces/Theme';
-//import * as theme from '@/functions/theme';
+import { Theme } from '@/models/Theme';
 
 export default Vue.extend({
 

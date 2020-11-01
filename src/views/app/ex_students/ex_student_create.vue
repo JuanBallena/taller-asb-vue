@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TitleComponent text="Editar alumno" color="successColor" />
+    <TitleComponent text="Registrar ex alumno" color="successColor" />
     
     <v-row>
       <v-col cols="12" lg="10" md="10" sm="10">
@@ -9,7 +9,7 @@
           <v-col cols="12" lg="6" md="6" sm="12">
             <TextInputComponent
               label="Nombres"
-              v-model="studentForm.name"
+              v-model="exStudentForm.name"
               placeholder="Nombres..." 
             />
           </v-col>
@@ -17,7 +17,7 @@
           <v-col cols="12" lg="6" md="6" sm="12">
             <TextInputComponent
               label="Apellidos"
-              v-model="studentForm.lastName"
+              v-model="exStudentForm.lastName"
               placeholder="Apellidos..." 
             />
           </v-col>
@@ -25,7 +25,7 @@
           <v-col cols="12" lg="6" md="6" sm="12">
             <RadioGroupComponent
               label="Tipo documento"
-              v-model="studentForm.idDocumentType"
+              v-model="exStudentForm.idDocumentType"
               :items="optionList1"
             />
           </v-col>
@@ -33,7 +33,7 @@
           <v-col cols="12" lg="6" md="6" sm="12">
             <TextInputComponent
               label="Nro. documento"
-              v-model="studentForm.document"
+              v-model="exStudentForm.document"
               placeholder="Nro. documento..." 
             />
           </v-col>
@@ -41,7 +41,7 @@
           <v-col cols="12" lg="6" md="6" sm="12">
             <TextInputComponent
               label="Domicilio"
-              v-model="studentForm.address"
+              v-model="exStudentForm.address"
               placeholder="Domicilio..." 
             />
           </v-col>
@@ -49,23 +49,38 @@
           <v-col cols="12" lg="6" md="6" sm="12">
             <TextInputComponent
               label="Contactos"
-              v-model="studentForm.phone"
+              v-model="exStudentForm.phone"
               placeholder="Contactos..." 
             />
           </v-col>
 
-          <v-col cols="12" lg="3" md="3" sm="6">
-            <SwitchInputComponent
-              v-model="studentForm.suspended"
-              label="Suspendido"
-              :disabled="studentInactive"
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <TextInputComponent
+              label="Promoción"
+              v-model="exStudentForm.promotion"
+              placeholder="Promoción..." 
+            />
+          </v-col>
+        </v-row>
+
+        <FormGroupTitleComponent text="Usuario" />
+        <v-row>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <TextInputComponent
+              label="Nombre de usuario"
+              v-model="exStudentForm.username"
+              placeholder="Nombre de usuario..." 
             />
           </v-col>
 
-          <v-col cols="12" lg="3" md="3" sm="6">
-            <SwitchInputComponent
-              v-model="studentForm.hasDocumentCopy"
-              label="Copia de DNI"
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <TextInputComponent
+              label="Contraseña"
+              v-model="exStudentForm.password"
+              placeholder="Contraseña..."
+              :type="showPassword ? 'text' : 'password'"
+              :icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+              @click-icon="showPassword = !showPassword"
             />
           </v-col>
         </v-row>
@@ -74,10 +89,10 @@
           <v-col cols="12" lg="6" md="6" sm="6">
             <FormButtonComponent
               icon="fas fa-arrow-left"
-              text="Regresar a alumnos"
+              text="Regresar a ex alumnos"
               color="accentColor"
               textColor="infoColor"
-              :route="{ name: 'student-list' }"
+              :route="{ name: 'ex-student-list' }"
             />
           </v-col>
 
@@ -92,75 +107,55 @@
           </v-col>
         </v-row>
       </v-col>
-     </v-row>
+    </v-row>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { mapState, mapActions, mapMutations } from 'vuex';
-import { PARAMETER_INACTIVE } from '@/definitions/parameter_definition';
-import { PARAMETER_TYPE_TYPE_DOCUMENT } from '@/definitions/parameter_type_definition';
-
+import Vue from 'vue'
+import { mapState, mapMutations, mapActions } from "vuex";
+import { PARAMETER_TYPE_TYPE_DOCUMENT } from "@/definitions/parameter_type_definition";
+import { PARAMETER_DNI } from "@/definitions/parameter_definition";
 export default Vue.extend({
 
   data: () => {
-    return {
-      studentForm: {
-        id: -1,
+    return { 
+      exStudentForm: {
         name: '',
         lastName: '',
-        idDocumentType: -1,
+        idDocumentType: PARAMETER_DNI,
         document: '',
         address: '',
         phone: '',
-        hasDocumentCopy: false,
-        suspended: false,
+        promotion: '',
+        username: '',
+        password: '',
       },
-      idStatus: -1
+      showPassword: false
     }
   },
 
-  async created() {
-    const idStudent = this.$route.params.id;
-    await this.getStudent(idStudent);
+  async created(): Promise<void> {
     await this.getParameterList1(`?idParameterType=${ PARAMETER_TYPE_TYPE_DOCUMENT }`);
-
-    this.studentForm.id = this.student.id;
-    this.studentForm.name = this.student.name;
-    this.studentForm.lastName = this.student.lastName;
-    this.studentForm.idDocumentType = this.student.documentType.id;
-    this.studentForm.document = this.student.document;
-    this.studentForm.address = this.student.address;
-    this.studentForm.phone =  this.student.phone;
-    this.studentForm.hasDocumentCopy =  this.student.hasDocumentCopy;
-    this.studentForm.suspended =  this.student.suspended;
-    this.idStatus = this.student.status.id;
   },
 
   computed: {
-    ...mapState('studentModule', ['student']),
-    ...mapState('parameterModule', ['optionList1']),
-
-    studentInactive(): boolean {
-      return this.idStatus == PARAMETER_INACTIVE;
-    }
+    ...mapState('parameterModule', ['optionList1'])
   },
 
   methods: {
     ...mapMutations('parameterModule', ['RESET_OPTION_LIST_1']),
-    ...mapActions('studentModule', ['getStudent','updateStudent']),
     ...mapActions('parameterModule', ['getParameterList1']),
+    ...mapActions('exStudentModule', ['saveExStudent']),
 
     async save(): Promise<void> {
-
-      await this.updateStudent(this.studentForm);
-      this.$router.push({ name: 'student-list' });
+      
+      await this.saveExStudent(this.exStudentForm);
+      this.$router.push({ name: 'ex-student-list' });
     }
-
   },
 
-  beforeDestroy() {
+  beforeDestroy(): void{
     this.RESET_OPTION_LIST_1();
   }
 });

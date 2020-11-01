@@ -12,18 +12,18 @@
       disable-pagination
     >
       <template v-slot:[`item.fullName`]="{ item }">
-        {{ item.lastName}} {{ item.name }}
+        {{ item.getFullName() }}
       </template>
       <template v-slot:[`item.promotion`]="{ item }">
-        {{ item.promotion || "No definido" }}
+        {{ item.getPromotion() }}
       </template>
       <template v-slot:[`item.hasDocumentCopy`]="{ item }">
-        {{ item.hasDocumentCopy ? "Si" : "No" }}
+        {{ item.getHasDocumentCopy() }}
       </template>
       <template v-slot:[`item.status`]="{ item }">
         <ChipComponent 
           :text="item.status.description"
-          :color="getStatusColor(item.status.id)"
+          :color="item.getStatusColor()"
         />
       </template>
       <template v-slot:[`item.actions`]="{ item }">
@@ -38,8 +38,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { ExStudent } from '@/interfaces/ExStudent';
-import * as exStudent from '@/functions/ex_student';
+import { ExStudent } from '@/models/ExStudent';
 
 export default Vue.extend({
 
@@ -62,12 +61,5 @@ export default Vue.extend({
       ],
     }
   },
-
-  methods: {
-    getStatusColor(idStatus: number): string {
-      return exStudent.getStatusColor(idStatus);
-    }
-  }
-
 });
 </script>

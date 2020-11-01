@@ -2,29 +2,38 @@ import axios from "axios";
 import { getBaseUrlApi } from "@/api/index";
 import { checkResponseStatusCode } from "@/utils/response_status_http"
 import { getMessageErrorResponseCode, responseCodeOk } from "@/api/response_code";
-import { ExStudent } from "@/interfaces/ExStudent";
+import { ExStudent } from "@/models/ExStudent";
+import { IExStudent, IFormCreateExStudent, IFormUpdateExStudent } from "@/interfaces/ex_student_interfaces";
+import * as exStudentConverter from "@/converter/ex_student_converter";
 
 export default {
 
   namespaced: true,
 
   state: {
-    exStudentList: [],
+    exStudentList: [] as ExStudent[],
     totalPages: -1,
-    exStudent: null
+    exStudent: ExStudent
   },
 
   mutations: {
-    SET_EX_STUDENT_LIST(state: { exStudentList: [] }, data: []) {
-      state.exStudentList = data;
+    SET_EX_STUDENT_LIST(state: { exStudentList: ExStudent[] }, data: IExStudent[]) {
+
+      state.exStudentList = [];
+      data.forEach((exStudent, i) => {
+        const exStudentModel = exStudentConverter.toExStudentModel(exStudent);
+        state.exStudentList.push(exStudentModel);
+      });
     },
 
     SET_TOTAL_PAGES(state: { totalPages: number }, pages: number) {
+
       state.totalPages = pages;
     },
 
-    SET_EX_STUDENT(state: { exStudent: ExStudent }, data: ExStudent) {
-      state.exStudent = data;
+    SET_EX_STUDENT(state: { exStudent: ExStudent }, data: IExStudent) {
+
+      state.exStudent = exStudentConverter.toExStudentModel(data);
     }
   },
 
@@ -59,6 +68,43 @@ export default {
           commit('SET_EX_STUDENT', data);
         } else {
           alert(responseCode);
+        }
+      } catch (error) {
+        checkResponseStatusCode(error.response.status);
+      }
+    },
+
+    async saveExStudent({ commit }: any, form: IFormCreateExStudent) {
+
+      try {
+        const dataPost = exStudentConverter.toCreateExStudentFormDto(form);
+        const response = await axios.post(getBaseUrlApi() + `/ex_students`, dataPost/*, getAuthorization()*/)
+        const responseCode = response.data['responseCode'];
+
+        if (responseCodeOk(responseCode)) {
+          const data = response.data['data'];
+          
+          commit('SET_EX_STUDENT', data);
+        } else {
+          console.log(responseCode);
+        }
+      } catch (error) {
+        checkResponseStatusCode(error.response.status);
+      }
+    },
+
+    async updateExStudent({ commit }: any, form: IFormUpdateExStudent) {
+      
+      try {
+        const dataPost = exStudentConverter.toUpdateExStudentFormDto(form);
+        const response = await axios.put(getBaseUrlApi() + `/ex_students/${form.id}`, dataPost/*, getAuthorization()*/)
+        const responseCode = response.data['responseCode'];
+
+        if (responseCodeOk(responseCode)) {
+          const data = response.data['data'];
+          commit('SET_EX_STUDENT', data);
+        } else {
+          console.log(responseCode);
         }
       } catch (error) {
         checkResponseStatusCode(error.response.status);

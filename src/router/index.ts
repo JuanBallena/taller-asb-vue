@@ -46,17 +46,17 @@ Vue.use(VueRouter)
       {
         path: '/ex-alumnos',
         name: 'ex-student-list',
-        component: () => import('../views/app/ex_student/ex_student_list.vue')
+        component: () => import('../views/app/ex_students/ex_student_list.vue')
       },
       {
         path: '/ex-alumnos/registrar',
         name: 'ex-student-create',
-        component: () => import('../views/app/ex_student/ex_student_create.vue')
+        component: () => import('../views/app/ex_students/ex_student_create.vue')
       },
       {
         path: '/ex-alumnos/editar/:id',
         name: 'ex-student-edit',
-        component: () => import('../views/app/ex_student/ex_student_edit.vue')
+        component: () => import('../views/app/ex_students/ex_student_edit.vue')
       },
       {
         path: '/actividades',

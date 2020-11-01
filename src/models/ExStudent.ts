@@ -1,7 +1,7 @@
-import { PARAMETER_ACTIVE } from '@/definitions/parameter_definition';
+import { PARAMETER_ACTIVE, PARAMETER_ACTIVE_S, PARAMETER_INACTIVE_S } from '@/definitions/parameter_definition';
 import { Parameter } from '@/models/Parameter';
 
-export class Student {
+export class ExStudent {
 
   public id: number
   public name: string
@@ -12,7 +12,7 @@ export class Student {
   public address: string
   public phone: string
   public hasDocumentCopy: boolean
-  public suspended: boolean
+  public promotion: string
   public status: Parameter
 
   constructor(
@@ -25,7 +25,7 @@ export class Student {
     address: string,
     phone: string,
     hasDocumentCopy: boolean,
-    suspended: boolean,
+    promotion: string,
     status: Parameter
   ) {
     this.id = id;
@@ -37,7 +37,7 @@ export class Student {
     this.address = address;
     this.phone = phone;
     this.hasDocumentCopy = hasDocumentCopy;
-    this.suspended = suspended;
+    this.promotion = promotion;
     this.status = status;
   }
 
@@ -48,14 +48,12 @@ export class Student {
   public getHasDocumentCopy(): string {
     return this.hasDocumentCopy ? "Si" : "No";
   }
-  public getStatusText(): string {
-    return this.suspended ? 'Suspendido' : this.status.description;
+
+  public getPromotion(): string {
+    return this.promotion ? this.promotion : "No definido";
   }
   
   public getStatusColor(): string {
-    if (this.suspended) {
-      return 'secondaryColor';
-    }
     return this.status.id == PARAMETER_ACTIVE ? 'successColor' : 'dangerColor';
   }
 }
