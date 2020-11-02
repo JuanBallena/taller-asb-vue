@@ -32,6 +32,7 @@ Vue.component('RadioGroupComponent', require('./components/radio_group.vue').def
 Vue.component('RoundedButtonColorComponent', require('./components/rounded_button_color.vue').default);
 Vue.component('RoundedButtonComponent', require('./components/rounded_button.vue').default);
 Vue.component('SearchInputComponent', require('./components/search_input.vue').default);
+Vue.component('SelectInputComponent', require('./components/select_input.vue').default);
 Vue.component('SubtitleComponent', require('./components/subtitle.vue').default);
 Vue.component('SwitchInputComponent', require('./components/switch_input.vue').default);
 Vue.component('TextInputComponent', require('./components/text_input.vue').default);

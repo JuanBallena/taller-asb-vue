@@ -20,7 +20,7 @@ export default {
     SET_EX_STUDENT_LIST(state: { exStudentList: ExStudent[] }, data: IExStudent[]) {
 
       state.exStudentList = [];
-      data.forEach((exStudent, i) => {
+      data.forEach((exStudent) => {
         const exStudentModel = exStudentConverter.toExStudentModel(exStudent);
         state.exStudentList.push(exStudentModel);
       });

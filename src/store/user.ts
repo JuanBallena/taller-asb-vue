@@ -3,6 +3,8 @@ import { getBaseUrlApi } from "@/api/index";
 import { checkResponseStatusCode } from "@/utils/response_status_http"
 import { responseCodeOk } from "@/api/response_code";
 import { User } from "@/models/User";
+import { IUser, IFormCreateUser, IFormUpdateUser } from "@/interfaces/user_interfaces";
+import * as userConverter from "@/converter/user_converter";
 
 export default {
 
@@ -15,16 +17,11 @@ export default {
   },
 
   mutations: {
-    SET_USER_LIST(state: { userList: User[] }, users: User[]) {
+    SET_USER_LIST(state: { userList: User[] }, users: IUser[]) {
       state.userList = [];
 
-      users.forEach((user, i) => {
-        const userModel = new User(
-          user.id,
-          user.username,
-          user.role,
-          user.status
-        );
+      users.forEach((user) => {
+        const userModel = userConverter.toUserModel(user);
         state.userList.push(userModel);
       });
     },
@@ -33,14 +30,8 @@ export default {
       state.totalPages = pages;
     },
 
-    SET_USER(state: { user: User }, user: User) {
-      const userModel = new User(
-        user.id,
-        user.username,
-        user.role,
-        user.status
-      );
-      state.user = userModel;
+    SET_USER(state: { user: User }, user: IUser) {
+      state.user = userConverter.toUserModel(user);
     },
   },
 
@@ -75,6 +66,43 @@ export default {
           commit('SET_USER', data);
         } else {
           alert(responseCode);
+        }
+      } catch (error) {
+        checkResponseStatusCode(error.response.status);
+      }
+    },
+
+    async saveUser({ commit }: any, form: IFormCreateUser) {
+
+      try {
+        const dataPost = userConverter.toCreateUserFormDto(form);
+        const response = await axios.post(getBaseUrlApi() + `/users`, dataPost/*, getAuthorization()*/)
+        const responseCode = response.data['responseCode'];
+        
+        if (responseCodeOk(responseCode)) {
+          const data = response.data['data'];
+          
+          commit('SET_USER', data);
+        } else {
+          console.log(responseCode);
+        }
+      } catch (error) {
+        checkResponseStatusCode(error.response.status);
+      }
+    },
+
+    async updateUser({ commit }: any, form: IFormUpdateUser) {
+
+      try {
+        const dataPost = userConverter.toUpdateUserFormDto(form);
+        const response = await axios.put(getBaseUrlApi() + `/users/${form.id}`, dataPost/*, getAuthorization()*/)
+        const responseCode = response.data['responseCode'];
+
+        if (responseCodeOk(responseCode)) {
+          const data = response.data['data'];
+          commit('SET_USER', data);
+        } else {
+          console.log(responseCode);
         }
       } catch (error) {
         checkResponseStatusCode(error.response.status);

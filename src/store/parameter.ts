@@ -3,42 +3,40 @@ import { getBaseUrlApi } from "@/api/index";
 import { checkResponseStatusCode } from "@/utils/response_status_http"
 import { getMessageErrorResponseCode, responseCodeOk } from "@/api/response_code";
 import { IParameter } from "@/interfaces/parameter_interfaces";
-import { Option } from "@/models/Option";
-import * as optionConverter from "@/converter/option_converter";
+import { Parameter } from "@/models/Parameter";
+import * as parameterConverter from "@/converter/parameter_converter";
 
 export default {
 
   namespaced: true,
 
   state: {
-    optionList1: [] as Option[],
-    optionList2: [] as Option[],
+    parameterList1: [] as Parameter[],
+    parameterList2: [] as Parameter[],
     
   },
 
   mutations: {
-    SET_OPTION_LIST_1(state: { optionList1: Option[] }, data: IParameter[]) {
-      
-      data.forEach((parameter, i) => {
-        const optionModel = optionConverter.toOptionModel(parameter);
-        state.optionList1.push(optionModel);
+    SET_PARAMETER_LIST_1(state: { parameterList1: Parameter[] }, data: IParameter[]) {
+
+      data.forEach((parameter) => {
+        state.parameterList1.push(parameterConverter.toParameterModel(parameter));
       });
     },
 
-    SET_OPTION_LIST_2(state: { optionList2: Option[] }, data: IParameter[]) {
+    SET_PARAMETER_LIST_2(state: { parameterList2: Parameter[] }, data: IParameter[]) {
       
-      data.forEach((parameter, i) => {
-        const optionModel = optionConverter.toOptionModel(parameter);
-        state.optionList2.push(optionModel);
+      data.forEach((parameter) => {
+        state.parameterList2.push(parameterConverter.toParameterModel(parameter));
       });
     },
 
-    RESET_OPTION_LIST_1(state: { optionList1: Option[] }) {
-      state.optionList1 = [];
+    RESET_PARAMETER_LIST_1(state: { parameterList1: Parameter[] }) {
+      state.parameterList1 = [];
     },
 
-    RESET_OPTION_LIST_2(state: { optionList2: Option[] }) {
-      state.optionList2 = [];
+    RESET_PARAMETER_LIST_2(state: { parameterList2: Parameter[] }) {
+      state.parameterList2 = [];
     }
   },
 
@@ -51,7 +49,7 @@ export default {
   
         if (responseCodeOk(responseCode)) {
           const data = response.data['data'];
-          commit('SET_OPTION_LIST_1', data);
+          commit('SET_PARAMETER_LIST_1', data);
         } else {
           alert(getMessageErrorResponseCode(responseCode));
         }
@@ -68,7 +66,7 @@ export default {
   
         if (responseCodeOk(responseCode)) {
           const data = response.data['data'];
-          commit('SET_OPTION_LIST_2', data);
+          commit('SET_PARAMETER_LIST_2', data);
         } else {
           alert(getMessageErrorResponseCode(responseCode));
         }

@@ -2,7 +2,7 @@ import { ITheme, IFormCreateTheme, IFormUpdateTheme } from '@/interfaces/theme_i
 import { Theme } from '@/models/Theme';
 
 export function toThemeModel(data: ITheme): Theme {
-
+  
   const themeModel = new Theme(
     data.id,
     data.title,

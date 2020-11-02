@@ -6,15 +6,15 @@
       class="radio-group"
       :mandatory="false"
       :value="value"
-      @keypress="$emit('input', $event)"
+      @change="$emit('input', $event)"
     >
       <v-row class="mx-0">
         <v-col cols="12" :lg="column" :md="column" :sm="column" class="pa-0"
           v-for="(item, index) in items" :key="index">
           <v-radio 
-            :label="item.text"
+            :label="item[`${itemText}`]"
             :color="radioColor"
-            :value="item.value" 
+            :value="item[`${itemValue}`]" 
             :class="`radio ${ items.length == index ? '' : 'margin-xs' }`"
           >
           {{ items.length }}
@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Option } from "@/models/Option";
+
 export default Vue.extend({
   props: {
     label: {
@@ -35,17 +35,24 @@ export default Vue.extend({
       default: 'Radios'
     },
     value: {
-      default: null,
-      type: Number
+      type: [Number, String, Boolean]
     },
     radioColor: {
       type: String,
       default: 'successColor'
     },
     items: {
-      type: Array as () => Array<Option>,
+      type: Array as () => Array<any>,
       default: () => []
     },
+    itemText: {
+      type: String,
+      default: ""
+    },
+    itemValue: {
+      type: String,
+      default: ""
+    }
   },
 
   computed: {

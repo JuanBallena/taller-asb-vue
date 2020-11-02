@@ -39,8 +39,7 @@ export default Vue.extend({
       default: 'Field...'
     },
     value: {
-      default: '',
-      type: String
+      type: [Number, String, Boolean]
     },
     type: {
       default: 'text',

@@ -26,7 +26,9 @@
             <RadioGroupComponent
               label="Tipo documento"
               v-model="studentForm.idDocumentType"
-              :items="optionList1"
+              :items="parameterList1"
+              itemText="description"
+              itemValue="id"
             />
           </v-col>
 
@@ -140,7 +142,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState('studentModule', ['student']),
-    ...mapState('parameterModule', ['optionList1']),
+    ...mapState('parameterModule', ['parameterList1']),
 
     studentInactive(): boolean {
       return this.idStatus == PARAMETER_INACTIVE;
@@ -148,7 +150,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapMutations('parameterModule', ['RESET_OPTION_LIST_1']),
+    ...mapMutations('parameterModule', ['RESET_PARAMETER_LIST_1']),
     ...mapActions('studentModule', ['getStudent','updateStudent']),
     ...mapActions('parameterModule', ['getParameterList1']),
 
@@ -161,7 +163,7 @@ export default Vue.extend({
   },
 
   beforeDestroy() {
-    this.RESET_OPTION_LIST_1();
+    this.RESET_PARAMETER_LIST_1();
   }
 });
 </script>

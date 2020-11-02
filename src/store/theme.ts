@@ -3,7 +3,7 @@ import { getBaseUrlApi } from "@/api/index";
 import { checkResponseStatusCode } from "@/utils/response_status_http"
 import { getMessageErrorResponseCode, responseCodeOk } from "@/api/response_code";
 import { Theme } from "@/models/Theme";
-import { ITheme, IFormCreateTheme } from "@/interfaces/theme_interfaces";
+import { ITheme, IFormCreateTheme, IFormUpdateTheme } from "@/interfaces/theme_interfaces";
 import * as themeConverter from "@/converter/theme_converter";
 
 export default {
@@ -18,7 +18,12 @@ export default {
 
   mutations: {
     SET_THEME_LIST(state: { themeList: Theme[] }, data: ITheme[]) {
-      state.themeList = data;
+      state.themeList = [];
+
+      data.forEach((theme) => {
+        const themeModel = themeConverter.toThemeModel(theme);
+        state.themeList.push(themeModel);
+      });
     },
 
     SET_TOTAL_PAGES(state: { totalPages: number }, pages: number) {
@@ -26,7 +31,7 @@ export default {
     },
 
     SET_THEME(state: { theme: Theme }, data: ITheme) {
-      state.theme = data;
+      state.theme = themeConverter.toThemeModel(data);
     }
   },
 
@@ -77,6 +82,24 @@ export default {
         if (responseCodeOk(responseCode)) {
           const data = response.data['data'];
           
+          commit('SET_THEME', data);
+        } else {
+          console.log(responseCode);
+        }
+      } catch (error) {
+        checkResponseStatusCode(error.response.status);
+      }
+    },
+
+    async updateTheme({ commit }: any, form: IFormUpdateTheme) {
+
+      try {
+        const dataPost = themeConverter.toUpdateThemeFormDto(form);
+        const response = await axios.put(getBaseUrlApi() + `/themes/${form.id}`, dataPost/*, getAuthorization()*/)
+        const responseCode = response.data['responseCode'];
+
+        if (responseCodeOk(responseCode)) {
+          const data = response.data['data'];
           commit('SET_THEME', data);
         } else {
           console.log(responseCode);

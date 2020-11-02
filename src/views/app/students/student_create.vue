@@ -26,7 +26,9 @@
             <RadioGroupComponent
               label="Tipo documento"
               v-model="studentForm.idDocumentType"
-              :items="optionList1"
+              :items="parameterList1"
+              itemText="description"
+              itemValue="id"
             />
           </v-col>
 
@@ -101,7 +103,7 @@
       </v-col>
     </v-row>
 
-    <!-- <v-snackbar
+    <v-snackbar
       v-model="snackbar"
       :vertical="true"
       left
@@ -117,7 +119,7 @@
           Close
         </v-btn>
       </template>
-    </v-snackbar> -->
+    </v-snackbar>
   </div>
 </template>
 
@@ -140,8 +142,8 @@ export default Vue.extend({
         username: '',
         password: '',
       },
-      showPassword: false
-      // snackbar: false
+      showPassword: false,
+      snackbar: false
     }
   },
 
@@ -150,24 +152,24 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState('parameterModule', ['optionList1'])
+    ...mapState('parameterModule', ['parameterList1'])
   },
 
   methods: {
-    ...mapMutations('parameterModule', ['RESET_OPTION_LIST_1']),
+    ...mapMutations('parameterModule', ['RESET_PARAMETER_LIST_1']),
     ...mapActions('parameterModule', ['getParameterList1']),
     ...mapActions('studentModule', ['saveStudent']),
 
     async save(): Promise<void> {
       
       await this.saveStudent(this.studentForm);
-      // this.snackbar = true;
+      this.snackbar = true;
       this.$router.push({ name: 'student-list' });
     }
   },
 
   beforeDestroy(): void {
-    this.RESET_OPTION_LIST_1();
+    this.RESET_PARAMETER_LIST_1();
   }
 });
 </script>
